@@ -1,22 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react'
 import {
   View,
   Text,
   StyleSheet
-} from 'react-native';
+} from 'react-native'
 
+import NumberInput from '../components/NumberInput'
 import Colors from '../constants/Colors'
 
 const SetItem = props => {
   return (
     <View style={styles.set}>
-      <Text style={styles.setNumber}>{props.setNumber}</Text>
-      <Text style={styles.setSpecs}>{props.reps}</Text>
-      <Text style={styles.setSpecs}>{props.meters}</Text>
-      <Text style={styles.setSpecs}>{props.pace}</Text>  
+      <Text style={styles.setNumber}>{props.index + 1}</Text>
+
+      {props.item.map(([key, value]) => {
+        return (
+          <NumberInput 
+            key={key}
+            index={props.index}
+            value={value} 
+            name={key}
+            onChangeValue={props.onChangeValue}
+          />
+        )
+      })}
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   set: {
@@ -32,12 +42,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.primaryColor,
     borderWidth: 2,
     textAlign: 'center'
-  },
-  setSpecs: {
-    fontFamily: 'montserrat',
-    fontSize: 18,
-    textAlign: 'center'
   }
-});
+})
 
-export default SetItem;
+export default SetItem

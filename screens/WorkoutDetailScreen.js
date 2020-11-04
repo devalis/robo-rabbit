@@ -31,12 +31,47 @@ const WorkoutDetailScreen = props => {
   const [title, setTitle] = useState(selectedWorkout.title)
   const [description, setDescription] = useState(selectedWorkout.description)
 
-  selectedWorkout.title = title
-  selectedWorkout.description = description
-
-  const setData = Object.keys(selectedWorkout.sets).map(key => {
+  let setData = Object.keys(selectedWorkout.sets).map(key => {
     return selectedWorkout.sets[key];
   })
+
+  setData = setData.map(set => {
+    let setOrder = {
+      reps: null,
+      meters: null,
+      pace: null
+    }
+
+    set = Object.assign(setOrder, set)
+    return set
+  })
+
+  const [sets, setSets] = useState(setData)
+
+  selectedWorkout.title = title
+  selectedWorkout.description = description
+  selectedWorkout.sets = sets
+  console.log('sets: ', sets);
+  //console.log('selectedWorkout.sets: ', selectedWorkout.sets);
+
+  const onChangeSets = (index, name, value) => {
+    const changedSets = [...sets]
+    let changedSet = sets[index]
+    changedSet = {...changedSet, [name]: parseInt(value)}
+    changedSets[index] = changedSet
+    setSets(changedSets)
+  };
+
+  const addSet = () => {
+    setSets([
+      ...sets, 
+      {
+        reps: 0,
+        meters: 0,
+        pace: 0
+      }
+    ])
+  }
 
   const dispatch = useDispatch()
 
@@ -86,7 +121,11 @@ const WorkoutDetailScreen = props => {
           <Text>Meters</Text>
           <Text>Pace</Text>
         </View>
-        <SetList listData={setData} />
+        <SetList 
+          listData={setData} 
+          onChangeSets={onChangeSets}
+          addSet={addSet}
+        />
       </View>
       <View>
         <TouchableOpacity
