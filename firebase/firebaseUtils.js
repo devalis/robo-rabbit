@@ -28,19 +28,25 @@ export const addWorkout = async (categoryId) => {
     return doc_ref.id   
 }
 
-export const deleteWorkouts = (categoryId) => {
-    const workouts_query = firestore.collection('categories').doc(categoryId).collection('workouts').where('title','==', '');
-        workouts_query.get().then(function(querySnapshot) {
-        querySnapshot.forEach(function(doc) {
-            doc.ref.delete();
-        });
-        });
+export const updateWorkout = (workout) => {
+    const { categoryId, id, title, description, date, sets } = workout
+   
+    firestore.collection('categories').doc(categoryId).collection('workouts').doc(id).set({
+        title, description, date, sets
+    }, { merge: true })
+    .then(function(docRef) {
+        console.log('Document written: ', docRef);
+    })
+    .catch(function(error) {
+        console.error('Error adding document: ', error);
+    });
 }
 
-export const addCatId = (catId, id) => {
+export const changeWorkoutDate = (catId, id) => {
     firestore.collection('categories').doc(catId).collection('workouts').doc(id).set({
-        categoryId: catId
-    }, { merge: true })
+        date: '9.12.2020',  
+    }, { merge: true }
+    )
     .then(function(docRef) {
         console.log('Document written: ', docRef);
     })
@@ -90,11 +96,28 @@ export const setWorkoutDate = (catId, id) => {
     });
 }
 
-export const updateWorkout = (workout) => {
-    const { categoryId, id, title, description, date, sets } = workout
-   
-    firestore.collection('categories').doc(categoryId).collection('workouts').doc(id).set({
-        title, description, date, sets
+export const deleteWorkouts = (categoryId) => {
+    const workouts_query = firestore.collection('categories').doc(categoryId).collection('workouts').where('date','==', '');
+        workouts_query.get().then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+            doc.ref.delete();
+        });
+        });
+}
+
+export const updateWorkouts = (catId) => {
+    const workouts_query = firestore.collection('categories').doc(catId).collection('workouts').where('date','==', '7.2.2020');
+        workouts_query.get().then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+            console.log('doc: ', doc.id);
+            changeWorkoutDate(catId, doc.id)
+        });
+        });
+}
+
+export const addCatId = (catId, id) => {
+    firestore.collection('categories').doc(catId).collection('workouts').doc(id).set({
+        categoryId: catId
     }, { merge: true })
     .then(function(docRef) {
         console.log('Document written: ', docRef);
