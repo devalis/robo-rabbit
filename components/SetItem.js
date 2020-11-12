@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React from 'react'
 import {
   View,
   Text,
   StyleSheet
 } from 'react-native'
-
+import { Ionicons } from '@expo/vector-icons';
+ 
 import NumberInput from '../components/NumberInput'
 import Colors from '../constants/Colors'
 
@@ -24,6 +25,14 @@ const SetItem = props => {
           />
         )
       })}
+      
+      <Ionicons 
+        style={styles.delete} 
+        name='ios-close' 
+        size={24} 
+        color={Colors.primaryColor} 
+        onPress={() => props.deleteSet(props.index)}
+      /> 
     </View>
   )
 }
@@ -42,6 +51,9 @@ const styles = StyleSheet.create({
     borderColor: Colors.primaryColor,
     borderWidth: 2,
     textAlign: 'center'
+  },
+  delete: {
+    padding: 8
   }
 })
 

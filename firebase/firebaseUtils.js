@@ -42,6 +42,16 @@ export const updateWorkout = (workout) => {
     });
 }
 
+export const deleteWorkout = (categoryId, id) => {
+    console.log('delete in firebase')
+    firestore.collection('categories').doc(categoryId).collection('workouts').doc(id).delete()
+    .then(function() {
+        console.log("Document successfully deleted!");
+    }).catch(function(error) {
+        console.error("Error removing document: ", error);
+    })        
+}
+
 export const changeWorkoutDate = (catId, id) => {
     firestore.collection('categories').doc(catId).collection('workouts').doc(id).set({
         date: '9.12.2020',  

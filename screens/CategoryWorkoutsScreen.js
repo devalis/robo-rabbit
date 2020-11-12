@@ -15,7 +15,7 @@ const CategoryWorkoutScreen = props => {
     workout => workout.categoryId.indexOf(catId) >= 0
   );
 
-  //firebase.deleteWorkouts(catId)
+  firebase.deleteWorkouts(catId)
 
   if (displayedWorkouts.length === 0) {
   //if (displayedWorkouts[0]) {

@@ -11,6 +11,7 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons'
 import { useSelector, useDispatch } from 'react-redux'
 
 import HeaderButton from '../components/HeaderButton'
+import SetHeaders from '../components/SetHeaders'
 import SetList from '../components/SetList'
 import { toggleFavorite, updateWorkout } from '../store/actions/workouts'
 //import { Colors } from 'react-native/Libraries/NewAppScreen'
@@ -18,6 +19,7 @@ import Colors from '../constants/Colors'
 
 
 const WorkoutDetailScreen = props => {
+  const catId = props.navigation.getParam('categoryId')
   const workoutId = props.navigation.getParam('workoutId')
   const newWorkout = props.navigation.getParam('workout')
 
@@ -51,8 +53,6 @@ const WorkoutDetailScreen = props => {
   selectedWorkout.title = title
   selectedWorkout.description = description
   selectedWorkout.sets = sets
-  console.log('sets: ', sets);
-  //console.log('selectedWorkout.sets: ', selectedWorkout.sets);
 
   const onChangeSets = (index, name, value) => {
     const changedSets = [...sets]
@@ -72,6 +72,12 @@ const WorkoutDetailScreen = props => {
       }
     ])
   }
+
+  const deleteSet = (index) => {
+    const changedSets = [...sets]
+    changedSets.splice(index, 1)
+    setSets(changedSets)
+  } 
 
   const dispatch = useDispatch()
 
@@ -115,22 +121,25 @@ const WorkoutDetailScreen = props => {
         />
       </View>
       <View style={styles.section}>
-        <View style={styles.setHeaders}>
-          <Text>sets</Text>
-          <Text>Reps</Text>
-          <Text>Meters</Text>
-          <Text>Pace</Text>
-        </View>
+        <SetHeaders addSet={addSet} />
         <SetList 
           listData={setData} 
           onChangeSets={onChangeSets}
-          addSet={addSet}
+          deleteSet={deleteSet}
         />
       </View>
       <View>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => updateWorkoutHandler()}
+          onPress={() => {
+            updateWorkoutHandler()
+            props.navigation.navigate({
+              routeName: 'CategoryWorkouts',
+              params: {
+                categoryId: catId
+              }
+            })
+          }}
           >
           <Text style={styles.buttonText}>Save</Text>
         </TouchableOpacity>
@@ -169,11 +178,6 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     backgroundColor: 'white',
     borderRadius: 10
-  },
-  setHeaders: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    margin: 5
   },
   label: {
     fontFamily: 'montserrat-bold',

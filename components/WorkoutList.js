@@ -44,13 +44,12 @@ const WorkoutList = props => {
     
     return (
       <WorkoutItem
-        title={itemData.item.title}
-        description={itemData.item.description}
-        date={itemData.item.date}
+        workout={itemData.item}
         onSelectWorkout={() => {
           props.navigation.navigate({
             routeName: 'WorkoutDetail',
             params: {
+              categoryId: catId,
               workoutId: itemData.item.id,
               isFav: isFavorite
             }
