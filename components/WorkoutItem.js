@@ -1,18 +1,21 @@
-import React, { useCallback } from 'react'
+import React, { useState, useCallback } from 'react'
 import {
   View,
   Text,
   StyleSheet,
-  TouchableOpacity
+  TouchableOpacity,
 } from 'react-native'
 import { useDispatch } from 'react-redux'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
+import StartModal from '../components/StartModal'
 import { deleteWorkout } from '../store/actions/workouts'
 import Colors from '../constants/Colors'
 
 
 const WorkoutItem = props => {
   const { id, categoryId, title, description, date } = props.workout
+
+  const [modalVisible, setModalVisible] = useState(false);
   
   const dispatch = useDispatch()
 
@@ -22,6 +25,10 @@ const WorkoutItem = props => {
 
   return (
     <View style={styles.WorkoutItem}>
+      <StartModal 
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible} 
+      />
       <TouchableOpacity onPress={props.onSelectWorkout}> 
         <MaterialCommunityIcons 
           style={styles.delete} 
@@ -32,7 +39,16 @@ const WorkoutItem = props => {
         />  
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.description}>{description}</Text>
-        <Text style={styles.date}>{date}</Text>      
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+        <MaterialCommunityIcons 
+          style={styles.run} 
+          name='run' 
+          size={26} 
+          color={Colors.primaryColor} 
+          onPress={() => setModalVisible(true)}
+        />
+        <Text style={styles.date}>{date}</Text>
+        </View>        
       </TouchableOpacity>      
     </View>
   )
@@ -69,6 +85,11 @@ const styles = StyleSheet.create({
   },
   date: {
     paddingVertical: 15,
+    paddingHorizontal: 15
+  },
+  run: {
+    zIndex: 1,
+    paddingVertical: 10,
     paddingHorizontal: 15
   }
 })

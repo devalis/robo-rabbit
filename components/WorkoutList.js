@@ -49,7 +49,6 @@ const WorkoutList = props => {
           props.navigation.navigate({
             routeName: 'WorkoutDetail',
             params: {
-              categoryId: catId,
               workoutId: itemData.item.id,
               isFav: isFavorite
             }
