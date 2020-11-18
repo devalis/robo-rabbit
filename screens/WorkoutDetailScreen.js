@@ -19,7 +19,6 @@ import Colors from '../constants/Colors'
 
 
 const WorkoutDetailScreen = props => {
-  const catId = props.navigation.getParam('categoryId')
   const workoutId = props.navigation.getParam('workoutId')
   const newWorkout = props.navigation.getParam('workout')
 
@@ -87,6 +86,7 @@ const WorkoutDetailScreen = props => {
 
   const updateWorkoutHandler = useCallback(() => {
     dispatch(updateWorkout(selectedWorkout))
+    props.navigation.goBack()
   }, [dispatch, selectedWorkout])
 
   useEffect(() => {
@@ -131,15 +131,7 @@ const WorkoutDetailScreen = props => {
       <View>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => {
-            updateWorkoutHandler()
-            props.navigation.navigate({
-              routeName: 'CategoryWorkouts',
-              params: {
-                categoryId: catId
-              }
-            })
-          }}
+          onPress={() => updateWorkoutHandler()}
           >
           <Text style={styles.buttonText}>Save</Text>
         </TouchableOpacity>
