@@ -56,7 +56,7 @@ const WorkoutDetailScreen = props => {
   const onChangeSets = (index, name, value) => {
     const changedSets = [...sets]
     let changedSet = sets[index]
-    changedSet = {...changedSet, [name]: parseInt(value)}
+    changedSet = {...changedSet, [name]: value}
     changedSets[index] = changedSet
     setSets(changedSets)
   };

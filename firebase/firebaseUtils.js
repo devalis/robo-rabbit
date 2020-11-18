@@ -73,18 +73,18 @@ export const addWorkoutSets = (catId, id) => {
         date: '7.2.2020',
         sets: {
             1: {
-                reps: 5,
-                meters: 200,
-                pace: 35
+                reps: '5',
+                meters: '200',
+                pace: '35'
             },
             2: {
-                reps: 3,
-                meters: 400,
-                pace: 75
+                reps: '3',
+                meters: '400',
+                pace: '75'
             }
         }   
     }
-    // , { merge: true }
+    //, { merge: true }
     )
     .then(function(docRef) {
         console.log('Document written: ', docRef);

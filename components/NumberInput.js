@@ -1,18 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { TextInput, StyleSheet } from 'react-native';
 
 
 const NumberInput = props => {
-  const { index, value, name, onChangeValue } = props
+  const [myNumber, setMyNumber] = useState(props.value)
+
   return (
     <TextInput 
       style={styles.number}
-      numeric
-      keyboardType={'numeric'} 
-      onChangeText={value => onChangeValue(index, name, value)}
-    >
-      {value}
-    </TextInput>    
+      keyboardType='number-pad' 
+      onChangeText={value => {
+        setMyNumber(value)
+        props.onChangeValue(props.index, props.name, value)
+      }}
+      value={myNumber}
+    />
   )
 }
 
