@@ -42,13 +42,23 @@ export const updateWorkout = (workout) => {
     });
 }
 
-export const deleteWorkout = (categoryId, id) => {
-    console.log('delete in firebase')
-    firestore.collection('categories').doc(categoryId).collection('workouts').doc(id).delete()
+export const deleteWorkout = (categoryId, workoutId) => {
+    firestore.collection('categories').doc(categoryId).collection('workouts').doc(workoutId).delete()
     .then(function() {
-        console.log("Document successfully deleted!");
+        console.log('Document successfully deleted!');
     }).catch(function(error) {
-        console.error("Error removing document: ", error);
+        console.error('Error removing document: ', error);
+    })        
+}
+
+export const toggleFavorite = (categoryId, workoutId, isFavorite) => {
+    firestore.collection('categories').doc(categoryId).collection('workouts').doc(workoutId).set({
+        isFavorite: isFavorite
+    }, { merge: true })
+    .then(function() {
+        console.log(`workout ${workoutId} is favorite: `, isFavorite);
+    }).catch(function(error) {
+        console.error(`Error toggling favorite workout ${workoutId}`, error);
     })        
 }
 
@@ -94,9 +104,9 @@ export const addWorkoutSets = (catId, id) => {
     });
 }
 
-export const setWorkoutDate = (catId, id) => {
+export const setIsFavorite = (catId, id) => {
     firestore.collection('categories').doc(catId).collection('workouts').doc(id).set({
-        date: new Date().toISOString().split('T')[0]    
+        isFavorite: false    
     }, { merge: true })
     .then(function(docRef) {
         console.log('Document written: ', docRef);
@@ -173,7 +183,7 @@ export const getWorkouts = () => {
             firestore.collection(`/categories/${cat.id}/workouts`)
             .get().then(function(querySnapshot) {
                 querySnapshot.forEach(function(doc) {
-                    const { categoryId, title, description, date, sets } = doc.data()
+                    const { categoryId, title, description, date, sets, isFavorite } = doc.data()
 
                     const workout = {
                         id: doc.id,
@@ -181,7 +191,8 @@ export const getWorkouts = () => {
                         title,
                         description,
                         date,
-                        sets
+                        sets,
+                        isFavorite
                     }
                     workouts.push(workout)
                     //addWorkoutSets(cat.id, doc.id)
@@ -208,7 +219,7 @@ export const getCategoryWorkouts = (catId) => {
                 date
             }
             workouts.push(workout)
-            firebase.setWorkoutDate(catId, doc.id);
+            //setIsFavorite(catId, doc.id);
             //console.log('!!workouts: ', workouts);
             //console.log('doc.id: ', doc.id);
         });

@@ -40,8 +40,6 @@ const WorkoutList = props => {
   }
 
   const renderWorkoutItem = itemData => {
-    const isFavorite = favoriteWorkouts.some(workout => workout.id === itemData.item.id)
-    
     return (
       <WorkoutItem
         workout={itemData.item}
@@ -49,8 +47,8 @@ const WorkoutList = props => {
           props.navigation.navigate({
             routeName: 'WorkoutDetail',
             params: {
-              workoutId: itemData.item.id,
-              isFav: isFavorite
+              catId: itemData.item.categoryId,
+              workoutId: itemData.item.id
             }
           })
         }}
@@ -67,13 +65,16 @@ const WorkoutList = props => {
         style={{ width: '100%' }}
         showsVerticalScrollIndicator={false}
       />
-      <Ionicons 
-        style={styles.add} 
-        name='ios-add-circle' 
-        size={45} 
-        color={Colors.primaryColor} 
-        onPress={addWorkout}
-      /> 
+      {!props.favScreen ?
+        <Ionicons 
+          style={styles.add} 
+          name='ios-add-circle' 
+          size={45} 
+          color={Colors.primaryColor} 
+          onPress={addWorkout}
+        /> 
+        : null
+      }
     </View>
   )
 }

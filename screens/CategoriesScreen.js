@@ -3,11 +3,21 @@ import {
   FlatList,
   StyleSheet
 } from 'react-native'
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import { HeaderButtons, Item } from 'react-navigation-header-buttons'
+import { YellowBox } from 'react-native'
+import _ from 'lodash'
 
-import HeaderButton from '../components/HeaderButton';
+import HeaderButton from '../components/HeaderButton'
 import { CATEGORIES } from '../data/dummy-dataReal'
 import CategoryGridTile from '../components/CategoryGridTile'
+
+YellowBox.ignoreWarnings(['Setting a timer'])
+const _console = _.clone(console)
+console.warn = message => {
+  if (message.indexOf('Setting a timer') <= -1) {
+    _console.warn(message)
+  }
+}
 
 const CategoriesScreen = props => {
   const renderGridItem = itemData => {
@@ -47,13 +57,13 @@ CategoriesScreen.navigationOptions = navData => {
           title='Menu'
           iconName='ios-menu'
           onPress={() => {
-            navData.navigation.toggleDrawer();
+            navData.navigation.toggleDrawer()
           }}
         />
       </HeaderButtons>
     )
-  };
-};
+  }
+}
 
 const styles = StyleSheet.create({
   screen: {

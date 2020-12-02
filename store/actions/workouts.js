@@ -3,8 +3,8 @@ export const SET_FILTERS = 'SET_FILTERS'
 export const UPDATE_WORKOUT = 'UPDATE_WORKOUT'
 export const DELETE_WORKOUT = 'DELETE_WORKOUT'
 
-export const toggleFavorite = (id) => {
-    return { type: TOGGLE_FAVORITE, workoutId: id }
+export const toggleFavorite = (catId, id) => {
+    return { type: TOGGLE_FAVORITE, categoryId: catId, workoutId: id }
 }
 
 export const setFilters = filterSettings => {

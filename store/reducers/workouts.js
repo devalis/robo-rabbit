@@ -6,25 +6,25 @@ const initialState = {
     //workouts: WORKOUTS,
     //filteredWorkouts: WORKOUTS,
     workouts: firebase.getWorkouts(),
-    filteredWorkouts: firebase.getWorkouts(),
-    favoriteWorkouts: []
+    filteredWorkouts: firebase.getWorkouts()
 }
 
 const workoutsReducer = (state = initialState, action) => {
     switch (action.type) {
         case TOGGLE_FAVORITE:
-          const existingIndex = state.favoriteWorkouts.findIndex(
+          const updatedFavWorkouts = [...state.workouts]
+          const workoutFavIndex = state.workouts.findIndex(
             workout => workout.id === action.workoutId
           )
-          if (existingIndex >= 0) {
-            const updatedFavWorkouts = [...state.favoriteWorkouts]
-            updatedFavWorkouts.splice(existingIndex, 1)
-            return { ...state, favoriteWorkouts: updatedFavWorkouts }
+          if (updatedFavWorkouts[workoutFavIndex].isFavorite === true) {
+            updatedFavWorkouts[workoutFavIndex].isFavorite = false
+            firebase.toggleFavorite(action.categoryId, action.workoutId, false)
           } else {
-            const workout = state.workouts.find(workout => workout.id === action.workoutId)
-            return { ...state, favoriteWorkouts: state.favoriteWorkouts.concat(workout) }
+            updatedFavWorkouts[workoutFavIndex].isFavorite = true
+            firebase.toggleFavorite(action.categoryId, action.workoutId, true)
           }
-
+          return { ...state, workouts: updatedFavWorkouts, filteredWorkouts: updatedFavWorkouts }
+        
         case SET_FILTERS:
           const appliedFilters = action.filters
           const updatedFilteredWorkouts = state.workouts.filter(workout => {

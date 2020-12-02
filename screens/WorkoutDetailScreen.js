@@ -9,25 +9,32 @@ import {
 } from 'react-native'
 import { HeaderButtons, Item } from 'react-navigation-header-buttons'
 import { useSelector, useDispatch } from 'react-redux'
+import { YellowBox } from 'react-native'
+import _ from 'lodash'
 
 import HeaderButton from '../components/HeaderButton'
 import SetHeaders from '../components/SetHeaders'
 import SetList from '../components/SetList'
 import { toggleFavorite, updateWorkout } from '../store/actions/workouts'
-//import { Colors } from 'react-native/Libraries/NewAppScreen'
+
 import Colors from '../constants/Colors'
 
+YellowBox.ignoreWarnings(['VirtualizedLists should never be nested'])
+const _console = _.clone(console);
+console.warn = message => {
+  if (message.indexOf('VirtualizedLists should never be nested') <= -1) {
+    _console.warn(message);
+  }
+};
 
 const WorkoutDetailScreen = props => {
+  const catId = props.navigation.getParam('catId')
   const workoutId = props.navigation.getParam('workoutId')
   const newWorkout = props.navigation.getParam('workout')
 
   const availableWorkouts = useSelector(state => state.workouts.workouts)
-  const currentWorkoutIsFavorite = useSelector(state =>
-    state.workouts.favoriteWorkouts.some(workout => workout.id === workoutId)
-  )
-  
   const selectedWorkout =  newWorkout ? newWorkout : availableWorkouts.find(workout => workout.id === workoutId)
+  const currentWorkoutIsFavorite = selectedWorkout.isFavorite ? true : false
   
   const [title, setTitle] = useState(selectedWorkout.title)
   const [description, setDescription] = useState(selectedWorkout.description)
@@ -81,7 +88,7 @@ const WorkoutDetailScreen = props => {
   const dispatch = useDispatch()
 
   const toggleFavoriteHandler = useCallback(() => {
-    dispatch(toggleFavorite(workoutId))
+    dispatch(toggleFavorite(catId, workoutId))
   }, [dispatch, workoutId])
 
   const updateWorkoutHandler = useCallback(() => {
@@ -142,11 +149,10 @@ const WorkoutDetailScreen = props => {
 }
 
 WorkoutDetailScreen.navigationOptions = navigationData => {
-  //const workoutId = navigationData.navigation.getParam('workoutId')
   const workoutTitle = navigationData.navigation.getParam('workoutTitle')
   const toggleFavorite = navigationData.navigation.getParam('toggleFav')
   const isFavorite = navigationData.navigation.getParam('isFav')
-  //const selectedWorkout = WORKOUTS.find(Workout => Workout.id === WorkoutId)
+
   return {
     headerTitle: workoutTitle,
     headerRight: () => (
