@@ -51,6 +51,16 @@ export const deleteWorkout = (categoryId, workoutId) => {
     })        
 }
 
+export const setActive = (sets) => {
+    firestore.collection('active').doc('XMGljm6vGpDx8KqSWA6Z').set({sets})
+    .then(function(docRef) {
+        console.log('Set active: ', docRef);
+    })
+    .catch(function(error) {
+        console.error('Error set active: ', error);
+    })  
+}
+
 export const toggleFavorite = (categoryId, workoutId, isFavorite) => {
     firestore.collection('categories').doc(categoryId).collection('workouts').doc(workoutId).set({
         isFavorite: isFavorite

@@ -6,16 +6,23 @@ import {
   TouchableOpacity,
 } from 'react-native'
 import { useDispatch } from 'react-redux'
+import * as firebase from '../firebase/firebaseUtils'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
-import StartModal from '../components/StartModal'
 import { deleteWorkout } from '../store/actions/workouts'
+import StartModal from '../components/StartModal'
 import Colors from '../constants/Colors'
 
 
 const WorkoutItem = props => {
-  const { id, categoryId, title, description, date } = props.workout
+  const { id, categoryId, title, description, date, sets } = props.workout
+  //console.log('props.workout: ', props.workout);
 
   const [modalVisible, setModalVisible] = useState(false);
+
+  const startWorkout = (sets) => {
+    firebase.setActive(sets)
+    setModalVisible(true)
+  }
   
   const dispatch = useDispatch()
 
@@ -45,7 +52,7 @@ const WorkoutItem = props => {
           name='run' 
           size={26} 
           color={Colors.primaryColor} 
-          onPress={() => setModalVisible(true)}
+          onPress={() => startWorkout(sets)}
         />
         <Text style={styles.date}>{date}</Text>
         </View>        

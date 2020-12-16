@@ -14,25 +14,25 @@ const StartModal = props => {
 
   return (
     <Modal
-    animationType='fade'
-    transparent={true}
-    visible={modalVisible}
-    onRequestClose={() => setModalVisible(false)}
+      animationType='fade'
+      transparent={true}
+      visible={modalVisible}
+      onRequestClose={() => setModalVisible(false)}
     >
-    <View style={styles.centeredView}>
-        <View style={styles.modalView}>
-        <TouchableOpacity
-            onPress={() => setModalVisible(false)}
-            >
-            <MaterialCommunityIcons  
-            name='clock-check-outline' 
-            size={160} 
-            color={'green'}
-            /> 
-            <Text style={styles.modalText}>Session started</Text>
-        </TouchableOpacity>
-        </View>
-    </View>
+      <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+          <TouchableOpacity
+              onPress={() => setModalVisible(false)}
+              >
+              <MaterialCommunityIcons  
+                name='clock-check-outline' 
+                size={160} 
+                color={'green'}
+              /> 
+              <Text style={styles.modalText}>Session started</Text>
+          </TouchableOpacity>
+          </View>
+      </View>
     </Modal>
   )
 }
